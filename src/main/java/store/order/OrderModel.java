@@ -6,6 +6,7 @@ import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -34,11 +35,15 @@ public class OrderModel {
     @Column(name = "dt_date")
     private Date date;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @Column(name = "total")
+    private Double total;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ItemModel> items;
 
     public OrderModel(Order a) {
         this.id = a.id();
+        this.total = a.total() != null ? a.total() : 0.0;
         this.date = a.date() != null ? a.date() : new Date();
         this.idAccount = a.idAccount().id();
     }
@@ -47,6 +52,7 @@ public class OrderModel {
         return Order.builder()
             .id(this.id)
             .date(this.date)
+            .total(total != null ? this.total : 0.0)
             .items(this.items != null ? this.items.stream().map(ItemModel::to).toList() : null)
             .idAccount(EntityId.builder().id(this.idAccount).build())
             .build();

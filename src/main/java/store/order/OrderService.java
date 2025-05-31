@@ -35,11 +35,6 @@ public class OrderService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Order must contain at least one item");
         }
 
-        Order savedOrder = orderRepository.save(new OrderModel(order)).to();
-
-        if (savedOrder == null) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save order");
-        }
 
         List<Item> orderItems = order.items();
 
@@ -75,7 +70,17 @@ public class OrderService {
                 .build());
 
             total += productOut.price() * it.quantity();
+        }
 
+        order.total(total);
+
+        Order savedOrder = orderRepository.save(new OrderModel(order)).to();
+
+        if (savedOrder == null) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save order");
+        }
+
+        for (Item it : orderItems) {
             itemRepository.save(new ItemModel(it, String.valueOf(savedOrder.id())));
         }
 

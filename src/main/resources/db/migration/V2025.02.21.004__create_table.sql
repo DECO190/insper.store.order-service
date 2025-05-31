@@ -1,6 +1,7 @@
 CREATE TABLE order_tb (
     id_order VARCHAR(36) NOT NULL PRIMARY KEY,
     dt_date TIMESTAMP DEFAULT NOW(),
+    total DECIMAL(10, 2) NOT NULL,
     id_account VARCHAR(36) NOT NULL
 );
 
