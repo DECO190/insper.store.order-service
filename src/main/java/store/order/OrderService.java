@@ -94,23 +94,23 @@ public class OrderService {
         return orderOut;
     }
 
-    public List<Order> findAll(String idAccount) {
+    public List<OrderSummary> findAll(String idAccount) {
         if (idAccount == null || idAccount.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid account ID");
         }
-        return StreamSupport
-            .stream(orderRepository.findAllByIdAccount(idAccount).spliterator(), false)
-            .map(OrderModel::to)
-            .toList();
+        return orderRepository.findAllByIdAccount(idAccount);
     }
 
-    public Order findById(String id) {
+    public Order findById(String id, String idAccount) {
         if (id == null || id.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid order ID");
         }
 
-        OrderModel prod = orderRepository.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found"));
+        OrderModel prod = orderRepository.findByIdAndIdAccount(id, idAccount);
+
+        if (prod == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found: " + id);
+        }
 
         return prod.to();
     }

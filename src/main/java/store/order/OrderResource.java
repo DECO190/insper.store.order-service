@@ -20,14 +20,16 @@ public class OrderResource implements OrderController {
     }
 
     @Override
-    public ResponseEntity<List<OrderOut>> findAll(String idAccount) {
+    public ResponseEntity<List<OrderSummary>> findAll(String idAccount) {
         return ResponseEntity.ok().body(
             orderService.findAll(idAccount)
-                .stream()
-                .map(OrderParser::to)
-                .toList()
         );
     }
 
-   
+    @Override
+    public ResponseEntity<OrderOut> getOrderById(String id, String idAccount) {
+        Order order = orderService.findById(id, idAccount);
+        
+        return ResponseEntity.ok().body(OrderParser.to(order));
+    }
 }

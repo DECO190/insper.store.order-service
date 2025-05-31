@@ -13,7 +13,8 @@ import feign.Param;
  */
 @Repository
 public interface OrderRepository extends CrudRepository<OrderModel, String> {
-    List<OrderModel> findAllByIdAccount(@Param("idAccount") String idAccount);
+
+    List<OrderSummary> findAllByIdAccount(@Param("idAccount") String idAccount);
 
     OrderModel findByIdAndIdAccount(@Param("id") String id, @Param("idAccount") String idAccount);
 }

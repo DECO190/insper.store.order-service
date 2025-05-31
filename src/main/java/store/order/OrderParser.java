@@ -15,7 +15,7 @@ public class OrderParser {
             OrderOut.builder()
                 .id(a.id())
                 .date(a.date())
-                .items(a.items().stream().map(ItemParser::to).toList())
+                .items(a.items() != null ? a.items().stream().map(ItemParser::to).toList() : null)
                 .total(a.total())
                 .build();
     }

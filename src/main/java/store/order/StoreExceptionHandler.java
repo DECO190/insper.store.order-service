@@ -1,4 +1,4 @@
-package store.product;
+package store.order;
 
 import java.util.Arrays;
 
